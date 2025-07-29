@@ -1,0 +1,145 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e6f0ff;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #1a73e8;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  width: 40px;
+  height: 40px;
+}
+
+h1 {
+  margin: 0;
+}
+
+#chatbox {
+  max-width: 600px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  height: 500px;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chat-message {
+  display: flex;
+  margin: 10px 0;
+  align-items: flex-end;
+}
+
+.chat-message.user {
+  justify-content: flex-start;
+}
+
+.chat-message.bot {
+  justify-content: flex-end;
+}
+
+.chat-icon {
+  width: 35px;
+  height: 35px;
+  margin: 0 10px;
+}
+
+.chat-bubble {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 15px;
+  line-height: 1.4;
+}
+
+.chat-message.user .chat-bubble {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  border-top-left-radius: 0;
+}
+
+.chat-message.bot .chat-bubble {
+  background-color: #1e3a8a;
+  color: white;
+  border-top-right-radius: 0;
+}
+
+.input-area {
+  max-width: 600px;
+  margin: 10px auto 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #93c5fd;
+}
+
+.input-area button {
+  background-color: #1a73e8;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.input-area button:hover {
+  background-color: #2563eb;
+}
+
+.error .chat-bubble {
+  background-color: #f87171;
+  color: white;
+}
+
+/* Floating Chatbot Icon */
+#chatbot-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #1a73e8;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+}
+
+#chatbot-icon img {
+  width: 35px;
+  height: 35px;
+}
+
+/* Hide Chat UI Initially */
+.hidden {
+  display: none;
+}
+
+/* Optional: Add Close button styling */
+header button#close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+

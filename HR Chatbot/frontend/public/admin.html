@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - HR Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f6ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      display: inline-block;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2, h3 {
+      color: #0056b3;
+    }
+
+    .file-list {
+      margin-top: 20px;
+      max-height: 250px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .file-item {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    input[type="file"] {
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .status {
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📄 HR Chatbot Admin Panel</h1>
+  </header>
+
+  <div class="container">
+
+    <h2>Upload New Company Policy Document</h2>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" required>
+      <br>
+      <button type="submit">Upload File</button>
+    </form>
+
+    <div class="status" id="statusMessage"></div>
+
+    <h3>📋 Existing Documents:</h3>
+    <div class="file-list" id="fileList">
+      Loading files...
+    </div>
+
+  </div>
+
+  <script>
+    async function loadFiles() {
+      const fileListDiv = document.getElementById('fileList');
+      try {
+        const res = await fetch('/admin/files');
+        const files = await res.json();
+
+        fileListDiv.innerHTML = '';
+
+        if (files.length === 0) {
+          fileListDiv.innerHTML = '<em>No documents found.</em>';
+        } else {
+          files.forEach(file => {
+            fileListDiv.innerHTML += `<div class="file-item">📄 ${file}</div>`;
+          });
+        }
+      } catch (error) {
+        fileListDiv.innerHTML = '<span style="color:red;">Error loading file list.</span>';
+      }
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const statusMessage = document.getElementById('statusMessage');
+
+      try {
+        const res = await fetch('/admin/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const text = await res.text();
+        statusMessage.style.color = 'green';
+        statusMessage.innerText = text;
+
+        await loadFiles();
+      } catch (error) {
+        statusMessage.style.color = 'red';
+        statusMessage.innerText = 'Error uploading file.';
+      }
+    });
+
+    window.onload = loadFiles;
+  </script>
+
+</body>
+</html>

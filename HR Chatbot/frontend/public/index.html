@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HR Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Floating Bot Icon -->
+  <div id="chatbot-icon" onclick="openChat()">
+    <img src="chatbot.png" alt="Chatbot Icon">
+  </div>
+
+  <!-- Full Chat UI (Hidden initially) -->
+  <div id="chat-container" class="hidden">
+    <header>
+      <img src="hr.png" alt="HR Icon" class="header-icon">
+      <h1>HR Chatbot</h1>
+      <button id="close-btn" onclick="closeChat()">X</button>
+    </header>
+
+    <div id="chatbox"></div>
+
+    <div class="input-area">
+      <input type="text" id="userMessage" placeholder="Type your message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function openChat() {
+      document.getElementById('chat-container').classList.remove('hidden');
+      document.getElementById('chatbot-icon').style.display = 'none';
+    }
+
+    function closeChat() {
+      document.getElementById('chat-container').classList.add('hidden');
+      document.getElementById('chatbot-icon').style.display = 'block';
+    }
+
+    async function sendMessage() {
+      const inputField = document.getElementById('userMessage');
+      const message = inputField.value.trim();
+      if (!message) return;
+
+      const chatbox = document.getElementById('chatbox');
+
+      chatbox.innerHTML += `
+        <div class="chat-message user">
+          <img src="user.png" class="chat-icon">
+          <div class="chat-bubble">${message}</div>
+        </div>
+      `;
+
+      inputField.value = '';
+
+      try {
+        const response = await fetch('/converse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+
+        chatbox.innerHTML += `
+          <div class="chat-message bot">
+            <div class="chat-bubble">${data.content}</div>
+            <img src="chatbot.png" class="chat-icon">
+          </div>
+        `;
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+      } catch (error) {
+        chatbox.innerHTML += `
+          <div class="chat-message bot error">
+            <div class="chat-bubble">Error contacting backend.</div>
+          </div>
+        `;
+      }
+    }
+
+    document.getElementById('userMessage').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+
+</body>
+</html>
